@@ -223,9 +223,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="raytracer\raytracer.h" />
+    <ClInclude Include="raytracer\scene\ray.h" />
     <ClInclude Include="raytracer\scene\scene.h" />
+    <ClInclude Include="raytracer\scene\shape.h" />
     <ClInclude Include="raytracer\scene\shapes\Sphere.h" />
-    <ClInclude Include="utils\vector3.h" />
+    <ClInclude Include="raytracer\utils\vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
