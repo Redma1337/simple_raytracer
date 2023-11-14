@@ -2,6 +2,13 @@
 
 Scene::Scene()
 {
+    /**
+     * The translation matrix looks like:
+     * | 1 0 0 0 |
+     * | 0 1 0 0 |
+     * | 0 0 1 0 |
+     * | 0 0 0 1 |
+     */
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
             view_matrix_[i][j] = i == j ? 1.0f : 0.0f;
@@ -63,6 +70,13 @@ void Scene::add_light_source(const Vector3& light_source)
 
 void Scene::setup_view_matrix(const Vector3& camera_pos)
 {
+    /**
+     * Relative matrix looks like
+     * | 1 0 0 x |
+     * | 0 1 0 y |
+     * | 0 0 1 z |
+     * | 0 0 0 1 |
+     */
     view_matrix_[0][3] = camera_pos.x;
     view_matrix_[1][3] = camera_pos.y;
     view_matrix_[2][3] = camera_pos.z;
@@ -70,8 +84,18 @@ void Scene::setup_view_matrix(const Vector3& camera_pos)
 
 Vector3 Scene::point_to_screen(const Vector3& point) const
 {
+    /**
+     * https://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/
+     * 
+     * | a b c d |   | x |   | a*x + b*y + c*z + d |
+     * | e f g h | * | y | = | e*x + f*y + g*z + h |
+     * | i j k l |   | z |   | i*x + j*y + k*z + l |
+     * | m n o p |  <- we can ignore w because we dont have perspective changes
+     */
     float x = view_matrix_[0][0] * point.x + view_matrix_[0][1] * point.y + view_matrix_[0][2] * point.z + view_matrix_[0][3];
     float y = view_matrix_[1][0] * point.x + view_matrix_[1][1] * point.y + view_matrix_[1][2] * point.z + view_matrix_[1][3];
     float z = view_matrix_[2][0] * point.x + view_matrix_[2][1] * point.y + view_matrix_[2][2] * point.z + view_matrix_[2][3];
-    return { x, y, z };
+    float w = view_matrix_[3][0] * point.x + view_matrix_[3][1] * point.y + view_matrix_[3][2] * point.z + view_matrix_[3][3];
+
+    return {x, y, z};
 }
