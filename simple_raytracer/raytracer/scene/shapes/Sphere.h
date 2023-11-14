@@ -1,16 +1,17 @@
 ﻿#pragma once
 #include "../shape.h"
 
-class Sphere : Shape
+class Sphere : public Shape
 {
 public:
-    Vector3 center;
     float radius;
+    Vector3 color;
 
-    Sphere(const Vector3& center, const float radius)
-        : center(center), radius(radius) {}
+    Sphere(const Vector3& pos, const float radius, const Vector3& color)
+        : Shape(pos), radius(radius), color(color)
+    {}
 
     // Check if a ray intersects with the sphere
     bool intersect(const Ray& ray, float& t) override;
-    Vector3 normalize(const Vector3& hit_point) override;
+    Vector3 get_color() override;
 };
