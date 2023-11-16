@@ -24,7 +24,7 @@ class Raytracer
     void spawn_render_threads();
     void render_frame() const;
 
-    void update_light(float time);
+    void update_light_circular(Vector3 center, float time, float radius, float speed);
 public:
     Raytracer(int image_width, int image_height, Vector3 camera_pos = { 0, 0, 0 }, float fov = math::pi / 2);
 

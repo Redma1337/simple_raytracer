@@ -63,17 +63,12 @@ void Raytracer::add_light(const Vector3& pos)
     scene_.add_light_source(pos);
 }
 
-void Raytracer::update_light(float time)
+void Raytracer::update_light_circular(Vector3 center, float time, float radius, float speed)
 {
-    // Update the light source position in a circular motion
-    float radius = 10.0f;  // Adjust the radius as needed
-    float angular_speed = 0.5f;  // Adjust the angular speed as needed
-
-    float angle = angular_speed * time;
-    float light_source_x = 0 + radius * std::cos(angle);
-    float light_source_y = 1;
-    float light_source_z = -5 + radius * std::sin(angle) ;
-
+    const float angle = speed * time;
+    const float light_source_x = center.x + radius * std::cos(angle);
+    const float light_source_y = center.y;
+    const float light_source_z = center.z + radius * std::sin(angle) ;
 
     scene_.add_light_source(Vector3(light_source_x, light_source_y, light_source_z));
 }
@@ -98,7 +93,7 @@ void Raytracer::start_rendering()
         auto end_time = std::chrono::high_resolution_clock::now();
         auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
 
-        update_light(static_cast<float>(elapsed_time) / 1000.f);
+        update_light_circular({0, 1, -5}, static_cast<float>(elapsed_time) / 1000.f, 10.f, 0.5f);
     }
 
     stop_rendering_thread();
