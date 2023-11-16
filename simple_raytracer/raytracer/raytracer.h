@@ -20,7 +20,7 @@ public:
 
     bool setup_glfw();
 
-    void add_sphere(const Vector3& pos, float radius, const Vector3& color);
+    std::shared_ptr<Sphere> add_sphere(const Vector3& pos, float radius, const Vector3& color);
     void add_light(const Vector3& pos);
-    void render_image() const;
+    void render_image();
 };

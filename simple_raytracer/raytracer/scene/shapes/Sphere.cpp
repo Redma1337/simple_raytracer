@@ -22,3 +22,8 @@ Vector3 Sphere::get_color()
 {
     return color;
 }
+
+Vector3 Sphere::normal_at(const Vector3& point)
+{
+    return point - position;
+}

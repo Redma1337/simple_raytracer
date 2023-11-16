@@ -47,10 +47,11 @@ bool Raytracer::setup_glfw()
 }
 
 //wrap the functionality of scene
-void Raytracer::add_sphere(const Vector3& pos, const float radius, const Vector3& color)
+std::shared_ptr<Sphere> Raytracer::add_sphere(const Vector3& pos, const float radius, const Vector3& color)
 {
     const auto new_sphere = std::make_shared<Sphere>(pos, radius, color);
     scene_.add_object(new_sphere);
+    return new_sphere;
 }
 
 void Raytracer::add_light(const Vector3& pos)
@@ -70,14 +71,16 @@ Ray Raytracer::get_ray_to_pixel(int x, int y) const
     return { camera_pos_, norm_dir_vec };
 }
 
-void Raytracer::render_image() const
+void Raytracer::render_image()
 {
     if (window_ == nullptr)
     {
         glfwTerminate();
         return;
     }
-    
+
+
+
     while (!glfwWindowShouldClose(window_))
     {
         glClear(GL_COLOR_BUFFER_BIT);

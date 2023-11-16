@@ -40,7 +40,7 @@ Vector3 Scene::compute_color(const Ray& ray) const
     {
         const Vector3 hit_point = ray.origin + ray.direction * nearest_hit_distance;
 
-        const Vector3 hit_direction_normal = (hit_point - nearest_shape->position).normalize();
+        const Vector3 hit_direction_normal = nearest_shape->normal_at(hit_point).normalize();
         const Vector3 light_direction_normal = (light_source_ - hit_point).normalize();
 
         // Lambertian reflection https://lavalle.pl/vr/node197.html max(0,nl)
