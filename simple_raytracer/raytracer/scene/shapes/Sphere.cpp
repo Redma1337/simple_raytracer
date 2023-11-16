@@ -1,5 +1,7 @@
 ﻿#include "Sphere.h"
 
+#include "../../utils/math.h"
+
 bool Sphere::intersect(const Ray& ray, float& t)
 {
     //https://viclw17.github.io/2018/07/16/raytracing-ray-sphere-intersection
@@ -14,7 +16,7 @@ bool Sphere::intersect(const Ray& ray, float& t)
     } 
 
     // since we dont need max precision we dont need to check both roots here
-    t = (-b - sqrt(discriminant)) / (2.0 * a);
+    t = (-b - math::qsqrt(discriminant)) / (2.0 * a);
     return true;
 }
 

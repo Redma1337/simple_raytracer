@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include <cmath>
 
+#include "math.h"
+
 class Vector3
 {
 public:
@@ -34,7 +36,7 @@ public:
     }
 
     Vector3 normalize() const {
-        const float magnitude = std::sqrt(x * x + y * y + z * z);
+        const float magnitude = math::qsqrt(x * x + y * y + z * z);
 
         if (magnitude != 0.f) {
             return{ x / magnitude, y / magnitude, z / magnitude };

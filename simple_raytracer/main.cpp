@@ -3,8 +3,8 @@
 
 enum
 {
-    WINDOW_WIDTH = 1024,
-    WINDOW_HEIGHT = 768
+    WINDOW_WIDTH = 800,
+    WINDOW_HEIGHT = 600
 };
 
 int main()
@@ -15,7 +15,7 @@ int main()
     tracer.add_sphere({ 0, 1, -8 }, 3, { 0, 1, 0 });
     tracer.add_light({ -2, 1, -4 });
 
-    tracer.render_image();
+    tracer.start_rendering();
     
     return EXIT_SUCCESS;
 }
