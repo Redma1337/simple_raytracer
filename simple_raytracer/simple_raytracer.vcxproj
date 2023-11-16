@@ -230,9 +230,6 @@
     <ClInclude Include="raytracer\utils\math.h" />
     <ClInclude Include="raytracer\utils\vector3.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include=".gitignore" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
