@@ -16,7 +16,7 @@ class Scene
 public:
     Scene();
     
-    Vector3 compute_color(const Ray& ray) const;
+    Vector3 compute_color(const Ray& ray, int recursion_depth) const;
     void add_object(const std::shared_ptr<Shape>& shape);
     void add_light_source(const Vector3& light_source);
 

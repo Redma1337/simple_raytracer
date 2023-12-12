@@ -14,6 +14,22 @@ Raytracer::Raytracer(const int image_width, const int image_height, const Vector
     chunk_size_ = image_width_ / available_threads_;
     image_pixels_.resize(image_width_, std::vector<Vector3>(image_height_));
 
+    const auto viewport_height = 2.0;
+    const auto viewport_width = viewport_height * (static_cast<double>(image_width_)/image_height_);
+
+    // Calculate the vectors across the horizontal and down the vertical viewport edges.
+    const auto viewport_u = Vector3(viewport_width, 0, 0);
+    const auto viewport_v = Vector3(0, -viewport_height, 0);
+
+    // Calculate the horizontal and vertical delta vectors from pixel to pixel.
+    pixel_delta_u_ = viewport_u / image_width_;
+    pixel_delta_v_ = viewport_v / image_height_;
+
+    // Calculate the location of the upper left pixel.
+    const auto viewport_upper_left = camera_pos_ - viewport_u/2 - viewport_v/2;
+    top_left_pixel_loc_ = viewport_upper_left + (pixel_delta_u_ + pixel_delta_v_) * 0.5f;
+
+
     scene_.setup_view_matrix(camera_pos_);
 }
 
@@ -93,7 +109,7 @@ void Raytracer::start_rendering()
         auto end_time = std::chrono::high_resolution_clock::now();
         auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
 
-        update_light_circular({0, 1, -5}, static_cast<float>(elapsed_time) / 1000.f, 10.f, 0.5f);
+        //update_light_circular({0, 1, -5}, static_cast<float>(elapsed_time) / 1000.f, 10.f, 0.5f);
     }
 
     stop_rendering_thread();
@@ -120,21 +136,11 @@ void Raytracer::render_frame() const
     glEnd();
 }
 
-Ray Raytracer::get_ray_to_pixel(int x, int y) const
+Ray Raytracer::get_ray_to_pixel(const int x, const int y) const
 {
-    const float half_fov = fov_ / 2.0f;
-    const float aspect_ratio = image_width_ / image_height_;
-    const float tan_half_fov = std::tan(half_fov);
-
-    const float u = (2.0f * x - image_width_) / image_width_;
-    const float v = (image_height_ - 2.0f * y) / image_height_;
-
-    const float ray_x = tan_half_fov * u * aspect_ratio;
-    const float ray_y = tan_half_fov * v;
-
-    auto norm_dir_vec = Vector3{ ray_x, ray_y, -1.0f }.normalize();
-
-    return { camera_pos_, norm_dir_vec };
+    const auto pixel_center = top_left_pixel_loc_ + pixel_delta_u_ * x + pixel_delta_v_ * y;
+    const auto ray_direction = pixel_center - camera_pos_ - Vector3(0, 0, 1); // this is only needed if we move the camera
+    return { camera_pos_, ray_direction };
 }
 
 void Raytracer::render_image_chunk(const int x_start_pos, const int x_end_pos)
@@ -144,7 +150,7 @@ void Raytracer::render_image_chunk(const int x_start_pos, const int x_end_pos)
         for (int y = 0; y < image_height_; ++y)
         {
             auto pixel_ray = get_ray_to_pixel(x, y);
-            image_pixels_[x][y] = scene_.compute_color(pixel_ray);
+            image_pixels_[x][y] = scene_.compute_color(pixel_ray, 10);
         }
     }
 }

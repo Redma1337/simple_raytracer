@@ -17,6 +17,9 @@ class Raytracer
 
     std::vector<std::vector<Vector3>> image_pixels_;
     std::vector<std::future<void>> futures_;
+    Vector3 top_left_pixel_loc_;
+    Vector3 pixel_delta_u_;
+    Vector3 pixel_delta_v_;
 
     Ray get_ray_to_pixel(int x, int y) const;
     void render_image_chunk(int x_start_pos, int x_end_pos);
