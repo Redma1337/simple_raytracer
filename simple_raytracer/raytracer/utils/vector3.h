@@ -68,14 +68,6 @@ public:
         return { };
     }
 
-    static Vector3 random_on_hemisphere(const Vector3& normal) {
-        Vector3 on_unit_sphere = random_unit_vector();
-        if (on_unit_sphere.dot(normal) > 0.0)
-            return on_unit_sphere;
-
-        return on_unit_sphere * -1;
-    }
-
     static Vector3 random_unit_vector()
     {
         while (true)

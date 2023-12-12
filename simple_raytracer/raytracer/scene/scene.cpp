@@ -40,11 +40,8 @@ Vector3 Scene::compute_color(const Ray& ray, int recursion_depth) const
     {
         const Vector3 hit_point = ray.origin + ray.direction * nearest_hit_distance;
         const Vector3 outward_normal = nearest_shape->normal_at(hit_point);
-        const bool front_face = ray.direction.dot(outward_normal) < 0;
-        const Vector3 face_adjusted_normal = front_face ? outward_normal : outward_normal * -1;
-        
 
-        const Ray scattered = nearest_shape->disperse(ray, hit_point, face_adjusted_normal);
+        const Ray scattered = nearest_shape->disperse(ray, hit_point, outward_normal);
         return nearest_shape->get_color() * compute_color(scattered, recursion_depth-1);
     }
 

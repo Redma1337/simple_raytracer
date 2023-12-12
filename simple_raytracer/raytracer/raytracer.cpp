@@ -14,19 +14,28 @@ Raytracer::Raytracer(const int image_width, const int image_height, const int ma
     chunk_size_ = image_width_ / available_threads_;
     image_pixels_.resize(image_width_, std::vector<Vector3>(image_height_));
 
+    //statische viewport height wählen
     const auto viewport_height = 2.0;
+
+    //viewport aspect ratio an input anpassen
     const auto viewport_width = viewport_height * (static_cast<double>(image_width_)/image_height_);
 
-    // Calculate the vectors across the horizontal and down the vertical viewport edges.
+    //vektor über die breite des viewports
     const auto viewport_u = Vector3(viewport_width, 0, 0);
+
+    //vektor über die höhe des viewports
     const auto viewport_v = Vector3(0, -viewport_height, 0);
 
-    // Calculate the horizontal and vertical delta vectors from pixel to pixel.
+    //breite einer kachel
     pixel_delta_u_ = viewport_u / image_width_;
+
+    //höhe einer kachel
     pixel_delta_v_ = viewport_v / image_height_;
 
-    // Calculate the location of the upper left pixel.
+    //vektor von blickpunkt auf die obere linke ecke des viewports
     const auto viewport_upper_left = camera_pos_ - viewport_u/2 - viewport_v/2;
+
+    //vektor auf die mitte der oberen linken kachel (erster Pixel)
     top_left_pixel_loc_ = viewport_upper_left + (pixel_delta_u_ + pixel_delta_v_) * 0.5f;
 
 

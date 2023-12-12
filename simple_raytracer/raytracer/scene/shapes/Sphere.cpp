@@ -4,19 +4,21 @@
 
 bool Sphere::intersect(const Ray& ray, float& root)
 {
-    //https://viclw17.github.io/2018/07/16/raytracing-ray-sphere-intersection
     const Vector3 oc = ray.origin - position;
     const float a = ray.direction.dot(ray.direction);
     const float half_b = oc.dot(ray.direction);
     const float c = oc.dot(oc) - radius * radius;
     const float discriminant = half_b * half_b - a * c;
-    
+
+    //kein Ergebnis
     if(discriminant < 0){
         return false;
     }
+
+    //1 oder 2  Ergebnisse
     const auto sqrt_discriminant = math::qsqrt(discriminant);
 
-    //check both results of the quadratic equation to ensure they are in valid range
+    //beide Ergebnisse im Interval von 0.001 und unendlich prüfen
     root = (-half_b - sqrt_discriminant) / a;
     if (root <= lower_root_boundary_ || upper_root_boundary_ <= root) {
         root = (-half_b + sqrt_discriminant) / a;
