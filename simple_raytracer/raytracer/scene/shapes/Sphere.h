@@ -1,8 +1,12 @@
 ﻿#pragma once
+#include <limits>
+
 #include "../shape.h"
 
 class Sphere : public Shape
 {
+    double lower_root_boundary_{0};
+    double upper_root_boundary_{std::numeric_limits<double>::infinity()};
 public:
     float radius;
     Vector3 color;
