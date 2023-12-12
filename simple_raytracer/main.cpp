@@ -9,12 +9,12 @@ enum
 
 int main()
 {
-    Raytracer tracer(WINDOW_WIDTH, WINDOW_HEIGHT);
+    Raytracer tracer(WINDOW_WIDTH, WINDOW_HEIGHT, 50);
 
-    tracer.add_sphere({ 0, 100.5f, -1 }, 100, { 1, 1, 1 });
-    tracer.add_sphere({ 0, 0, -1 }, 0.5f, { 1, 0, 0 });
-    tracer.add_sphere({ -0.8, -0.4f, -1 }, 0.4f, { 0, 1, 0 });
-    tracer.add_light({ -2, 1, -4 });
+    tracer.add_sphere({ 0, 100.5f, -1 }, 100, { 0.5f, 0.2f, 0.0f });
+    tracer.add_sphere({ 0, 0, -1 }, 0.5f, { 0.2f, 0.5f, 0.2f });
+    tracer.add_sphere({ -1, -0.3f, -1 }, 0.5f, { 0.8f, 0.8f, 0.8f }, false);
+    tracer.add_sphere({ 1, 0, -1 }, 0.5f, { 0.8f, 0.6f, 0.2f }, false);
 
     tracer.start_rendering();
     
