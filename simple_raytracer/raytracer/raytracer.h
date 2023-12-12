@@ -11,7 +11,7 @@ class Raytracer
     Scene scene_{};
 
     Vector3 camera_pos_;
-    float fov_;
+    int max_depth_;
     int image_width_, image_height_;
     int available_threads_, chunk_size_;
 
@@ -29,11 +29,10 @@ class Raytracer
 
     void update_light_circular(Vector3 center, float time, float radius, float speed);
 public:
-    Raytracer(int image_width, int image_height, Vector3 camera_pos = { 0, 0, 0 }, float fov = math::pi / 2);
+    Raytracer(int image_width, int image_height, int max_depth, Vector3 camera_pos = { 0, 0, 0 });
 
     bool setup_glfw();
 
-    std::shared_ptr<Sphere> add_sphere(const Vector3& pos, float radius, const Vector3& color);
-    void add_light(const Vector3& pos);
+    std::shared_ptr<Sphere> add_sphere(const Vector3& pos, float radius, const Vector3& color, bool is_solid = true);
     void start_rendering();
 };
