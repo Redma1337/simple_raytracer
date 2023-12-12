@@ -2,8 +2,8 @@
 #include <iomanip>
 #include <iostream>
 
-Raytracer::Raytracer(const int image_width, const int image_height, const Vector3 camera_pos, const float fov)
-    : camera_pos_{camera_pos}, fov_{fov}, image_width_{image_width}, image_height_{image_height}
+Raytracer::Raytracer(const int image_width, const int image_height, const int max_depth, const Vector3 camera_pos)
+    : camera_pos_{camera_pos}, max_depth_{max_depth}, image_width_{image_width}, image_height_{image_height}
 {
     if (!setup_glfw())
     {
@@ -67,32 +67,15 @@ bool Raytracer::setup_glfw()
 }
 
 //wrap the functionality of scene
-std::shared_ptr<Sphere> Raytracer::add_sphere(const Vector3& pos, const float radius, const Vector3& color)
+std::shared_ptr<Sphere> Raytracer::add_sphere(const Vector3& pos, const float radius, const Vector3& color, const bool is_solid)
 {
-    const auto new_sphere = std::make_shared<Sphere>(pos, radius, color);
+    const auto new_sphere = std::make_shared<Sphere>(pos, radius, color, is_solid);
     scene_.add_object(new_sphere);
     return new_sphere;
 }
 
-void Raytracer::add_light(const Vector3& pos)
-{
-    scene_.add_light_source(pos);
-}
-
-void Raytracer::update_light_circular(Vector3 center, float time, float radius, float speed)
-{
-    const float angle = speed * time;
-    const float light_source_x = center.x + radius * std::cos(angle);
-    const float light_source_y = center.y;
-    const float light_source_z = center.z + radius * std::sin(angle) ;
-
-    scene_.add_light_source(Vector3(light_source_x, light_source_y, light_source_z));
-}
-
 void Raytracer::start_rendering()
 {
-    auto start_time = std::chrono::high_resolution_clock::now();
-    
     while (!glfwWindowShouldClose(window_))
     {
         if (window_ == nullptr)
@@ -104,13 +87,7 @@ void Raytracer::start_rendering()
         spawn_render_threads();
 
         render_frame();
-
-        // sample fps
-        auto end_time = std::chrono::high_resolution_clock::now();
-        auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-
-        //update_light_circular({0, 1, -5}, static_cast<float>(elapsed_time) / 1000.f, 10.f, 0.5f);
-    }
+   }
 
     stop_rendering_thread();
     glfwTerminate();
@@ -150,7 +127,7 @@ void Raytracer::render_image_chunk(const int x_start_pos, const int x_end_pos)
         for (int y = 0; y < image_height_; ++y)
         {
             auto pixel_ray = get_ray_to_pixel(x, y);
-            image_pixels_[x][y] = scene_.compute_color(pixel_ray, 10);
+            image_pixels_[x][y] = scene_.compute_color(pixel_ray, max_depth_);
         }
     }
 }
