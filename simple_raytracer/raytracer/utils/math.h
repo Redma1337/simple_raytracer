@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <random>
+#include <stdlib.h>
 
 namespace math
 {
@@ -20,5 +22,11 @@ namespace math
         u.f = 0.25f * u.f + x / u.f;
 
         return u.f;
+    }
+
+    inline float random_float(const float min, const float max) {
+        static std::uniform_real_distribution<float> distribution(min, max);
+        static std::mt19937 generator;
+        return distribution(generator);
     }
 }
