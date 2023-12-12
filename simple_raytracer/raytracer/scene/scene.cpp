@@ -43,7 +43,13 @@ Vector3 Scene::compute_color(const Ray& ray, int recursion_depth) const
     if (nearest_shape)
     {
         const Vector3 hit_point = ray.origin + ray.direction * nearest_hit_distance;
+        const Vector3 outward_normal = nearest_shape->normal_at(hit_point);
+        const bool front_face = ray.direction.dot(outward_normal) < 0;
+        const Vector3 face_adjusted_normal = front_face ? outward_normal : outward_normal * -1;
+        
+        return (face_adjusted_normal + Vector3(1, 1, 1)) * 0.5f;
 
+        /*
         const Vector3 hit_direction_normal = nearest_shape->normal_at(hit_point).normalize();
         const Vector3 light_direction_normal = (light_source_ - hit_point).normalize();
 
@@ -53,7 +59,8 @@ Vector3 Scene::compute_color(const Ray& ray, int recursion_depth) const
 
         const Vector3 lambert_color = nearest_shape->get_color() * lambert_intensity;
         const Vector3 ambient_color = nearest_shape->get_color() * LAMBERT_AMBIENT_INTENSITY; // for better effect
-
+        return lambert_color + ambient_color;
+        */
         // Calculate reflection ray
         /*
         const float EPSILON = 0.001f;
@@ -66,7 +73,6 @@ Vector3 Scene::compute_color(const Ray& ray, int recursion_depth) const
         const float REFLECTION_INTENSITY = 0.5f;
         return lambert_color + reflection_color * REFLECTION_INTENSITY;
         */
-        return lambert_color + ambient_color;
     }
 
     return background_color;

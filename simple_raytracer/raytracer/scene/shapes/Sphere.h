@@ -12,7 +12,7 @@ public:
     {}
 
     // Check if a ray intersects with the sphere
-    bool intersect(const Ray& ray, float& t) override;
+    bool intersect(const Ray& ray, float& root) override;
     Vector3 get_color() override;
     Vector3 normal_at(const Vector3& point) override;
 };

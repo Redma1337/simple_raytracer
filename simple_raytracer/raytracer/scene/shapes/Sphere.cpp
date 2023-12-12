@@ -2,7 +2,7 @@
 
 #include "../../utils/math.h"
 
-bool Sphere::intersect(const Ray& ray, float& t)
+bool Sphere::intersect(const Ray& ray, float& root)
 {
     //https://viclw17.github.io/2018/07/16/raytracing-ray-sphere-intersection
     const Vector3 oc = ray.origin - position;
@@ -16,7 +16,7 @@ bool Sphere::intersect(const Ray& ray, float& t)
     } 
 
     // since we dont need max precision we dont need to check both roots here
-    t = (-b - math::qsqrt(discriminant)) / (2.0 * a);
+    root = (-b - math::qsqrt(discriminant)) / (2.0 * a);
     return true;
 }
 
@@ -27,5 +27,5 @@ Vector3 Sphere::get_color()
 
 Vector3 Sphere::normal_at(const Vector3& point)
 {
-    return point - position;
+    return (point - position) / radius;
 }

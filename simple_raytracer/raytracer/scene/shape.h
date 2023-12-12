@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "../utils/vector3.h"
 #include <cmath>
+
 #include "ray.h"
 
 class Shape
@@ -13,7 +14,7 @@ public:
     {}
     
     virtual ~Shape() = default;
-    virtual bool intersect(const Ray& ray, float& t) = 0;
+    virtual bool intersect(const Ray& ray, float& root) = 0;
     virtual Vector3 get_color() = 0;
     virtual Vector3 normal_at(const Vector3& point) = 0;
 };
